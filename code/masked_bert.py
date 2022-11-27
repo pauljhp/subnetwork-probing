@@ -1,7 +1,9 @@
 import torch
 import numpy as np
 
-from transformers.modeling_bert import BertSelfAttention, BertSelfOutput, BertIntermediate, BertOutput
+from transformers.models.bert.modeling_bert import (
+    BertSelfAttention, BertSelfOutput, BertIntermediate, BertOutput)
+
 
 from masked_linear import MaskedLinear
 from bert import WordLevelBert
