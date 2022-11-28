@@ -91,9 +91,9 @@ class WordLevelBert(nn.Module):
         
         # all_input_ids: num_sentences x max_sentence_len
         if output_hidden:
-            features, _, hidden, attention = self.bert(all_input_ids, attention_mask = all_input_mask)
+            features, _, hidden, attention = self.bert(all_input_ids, attention_mask = all_input_mask).values()
         else:
-            features, _ = self.bert(all_input_ids, attention_mask = all_input_mask)
+            features, _ = self.bert(all_input_ids, attention_mask = all_input_mask).values()
             hidden, attention = None, None
         del _
         # for each word, only keep last encoded token.
