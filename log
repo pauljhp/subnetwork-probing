@@ -49,3 +49,228 @@ Traceback (most recent call last):
   File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 302, in register_buffer
     raise AttributeError(
 AttributeError: cannot assign buffer before Module.__init__() call
+ERROR:root:bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 239, in hf_raise_for_status
+    response.raise_for_status()
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 409, in cached_file
+    resolved_file = hf_hub_download(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1065, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1374, in get_hf_file_metadata
+    hf_raise_for_status(r)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 268, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: X6-wD_lH77IIrYkBeEfuV)
+
+Repository Not Found for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If the repo is private, make sure you are authenticated.
+Invalid username or password.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 46, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 560, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 412, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 424, in cached_file
+    raise EnvironmentError(
+OSError: bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+ERROR:root:bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 239, in hf_raise_for_status
+    response.raise_for_status()
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 409, in cached_file
+    resolved_file = hf_hub_download(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1065, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1374, in get_hf_file_metadata
+    hf_raise_for_status(r)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 268, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: T3fOtm9oo_NXJP3RYnvxV)
+
+Repository Not Found for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If the repo is private, make sure you are authenticated.
+Invalid username or password.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 46, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 560, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 412, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 424, in cached_file
+    raise EnvironmentError(
+OSError: bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+ERROR:root:'MaskedWordLevelModel' object has no attribute 'register_buffer'
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 57, in __init__
+    self.register_buffer(model_name, self.model_family)
+AttributeError: 'MaskedWordLevelModel' object has no attribute 'register_buffer'
+ERROR:root:'MaskedWordLevelModel' object has no attribute 'register_buffer'
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 57, in __init__
+    self.register_buffer(model_name, self.model_family)
+AttributeError: 'MaskedWordLevelModel' object has no attribute 'register_buffer'
+ERROR:root:'MaskedWordLevelModel' object has no attribute 'register_buffer'
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 57, in __init__
+    self.register_buffer(model_name, self.model_family)
+AttributeError: 'MaskedWordLevelModel' object has no attribute 'register_buffer'
+ERROR:root:cannot assign 'str' object to buffer 'facebook/bart-base' (torch Tensor or None required)
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 57, in __init__
+    self.register_buffer(model_name, self.model_family)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 314, in register_buffer
+    raise TypeError("cannot assign '{}' object to buffer '{}' "
+TypeError: cannot assign 'str' object to buffer 'facebook/bart-base' (torch Tensor or None required)
+ERROR:root:cannot assign 'str' object to buffer 'facebook/bart-base' (torch Tensor or None required)
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 57, in __init__
+    self.register_buffer(model_name, self.model_family)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 314, in register_buffer
+    raise TypeError("cannot assign '{}' object to buffer '{}' "
+TypeError: cannot assign 'str' object to buffer 'facebook/bart-base' (torch Tensor or None required)
+ERROR:root:cannot assign 'transformers.models.bart.modeling_bart.BartModel' object to buffer 'model' (torch Tensor or None required)
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 58, in __init__
+    self.register_buffer("model", model)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 314, in register_buffer
+    raise TypeError("cannot assign '{}' object to buffer '{}' "
+TypeError: cannot assign 'transformers.models.bart.modeling_bart.BartModel' object to buffer 'model' (torch Tensor or None required)
+ERROR:root:'BartModel' object has no attribute 'pooler'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 59, in __init__
+    self.dim = self.model.pooler.dense.in_features
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'BartModel' object has no attribute 'pooler'
+ERROR:root:'T5ForConditionalGeneration' object has no attribute 'pooler'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 59, in __init__
+    self.dim = self.model.pooler.dense.in_features
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'T5ForConditionalGeneration' object has no attribute 'pooler'
+ERROR:root:'T5ForConditionalGeneration' object has no attribute 'embeddings'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 75, in __init__
+    self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'T5ForConditionalGeneration' object has no attribute 'embeddings'
+ERROR:root:'T5ForConditionalGeneration' object has no attribute 'embeddings'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 75, in __init__
+    self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'T5ForConditionalGeneration' object has no attribute 'embeddings'
+ERROR:root:bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+----
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 239, in hf_raise_for_status
+    response.raise_for_status()
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 409, in cached_file
+    resolved_file = hf_hub_download(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1065, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_validators.py", line 124, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/file_download.py", line 1374, in get_hf_file_metadata
+    hf_raise_for_status(r)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/huggingface_hub/utils/_errors.py", line 268, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: kLYKXKojodyJgIrwAB9By)
+
+Repository Not Found for url: https://huggingface.co/bart-base/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If the repo is private, make sure you are authenticated.
+Invalid username or password.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 46, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 560, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 412, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/transformers/utils/hub.py", line 424, in cached_file
+    raise EnvironmentError(
+OSError: bart-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo with `use_auth_token` or log in with `huggingface-cli login` and pass `use_auth_token=True`.
+ERROR:root:'BartModel' object has no attribute 'embeddings'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 75, in __init__
+    self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'BartModel' object has no attribute 'embeddings'
+ERROR:root:'BartModel' object has no attribute 'embeddings'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 75, in __init__
+    self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'BartModel' object has no attribute 'embeddings'
+ERROR:root:'T5ForConditionalGeneration' object has no attribute 'embeddings'
+----
+Traceback (most recent call last):
+  File "/Users/paulp/Documents/Personal/Study/MSc/COMP7607/FinalProject/subnetwork-probing/code/pretrained_models.py", line 75, in __init__
+    self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+  File "/opt/miniconda3/envs/subnet_prob/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'T5ForConditionalGeneration' object has no attribute 'embeddings'

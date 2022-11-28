@@ -4,11 +4,11 @@ import torch.nn.init as init
 
 from util import use_cuda
 
-class BertEncoder(nn.Module):
-    def __init__(self, bert, dropout_p = 0.1, mlp1 = False, rank = None):
+class ModelEncoder(nn.Module):
+    def __init__(self, pretrained_model, dropout_p = 0.1, mlp1 = False, rank = None):
         super().__init__()
-        self.bert = bert
-        d_features = self.bert.dim
+        self.model = pretrained_model
+        d_features = self.model.dim
         self.dropout = nn.Dropout(p = 0.1)
         self.use_mlp1 = mlp1
         if mlp1:
@@ -21,34 +21,34 @@ class BertEncoder(nn.Module):
                     nn.ReLU())
                 
     def forward(self, sentences, **kwargs):
-        ann, pad_mask = self.bert(sentences, **kwargs)
+        ann, pad_mask = self.model(sentences, **kwargs)
         ann = self.dropout(ann)
         if self.use_mlp1:
             ann = self.mlp1(ann)
         return ann, pad_mask
 
 class POSModel(nn.Module):
-    def __init__(self, bert_encoder, pos_vocab_size):
+    def __init__(self, pretrained_model, pos_vocab_size):
         super().__init__()
-        self.bert_encoder = bert_encoder
-        self.bert = self.bert_encoder.bert
-        d_features = self.bert_encoder.bert.dim
+        self.pretrained_model = pretrained_model
+        self.model = self.pretrained_model.model
+        d_features = self.pretrained_model.model.dim
         self.pos_tip = nn.Linear(d_features, pos_vocab_size)
         
         if use_cuda:
             self.cuda()
     
     def predict_batch(self, sentences):
-        ann, pad_mask = self.bert_encoder(sentences)
+        ann, pad_mask = self.pretrained_model(sentences)
         pos_pred = self.pos_tip(ann) # num_sent x pad_len x pos_vocab_size 
         return pos_pred
 
 class UDModel(nn.Module):
-    def __init__(self, bert_encoder, pos_vocab_size, arc_vocab_size):
+    def __init__(self, pretrained_model, pos_vocab_size, arc_vocab_size):
         super().__init__()
-        self.bert_encoder = bert_encoder
-        self.bert = self.bert_encoder.bert
-        d_features = self.bert_encoder.bert.dim
+        self.pretrained_model = pretrained_model
+        self.model = self.pretrained_model.model
+        d_features = self.pretrained_model.model.dim
         
         d_label_hidden = 1024
         d_label_hidden_arc = 256
@@ -106,7 +106,7 @@ class UDModel(nn.Module):
         # correct_heads : num_sent x pad_len, with index of correct head or -1
         # indexing starts at 1, which works out because we insert cls at 0
         # num_sent x pad_len x bert_dim, num_sent x pad_len
-        ann, pad_mask = self.bert_encoder(sentences)
+        ann, pad_mask = self.pretrained_model(sentences)
 
         pos_pred = self.pos_tip(ann) # num_sent x pad_len x pos_vocab_size
         
@@ -207,20 +207,20 @@ class UDModel(nn.Module):
         return pos_pred, dep_W_headT, dep_W_headT_arc
 
 class NERModel(nn.Module):
-    def __init__(self, bert_encoder):
+    def __init__(self, pretrained_model):
         super().__init__()
         self.tags = ('O', 'B-PER', 'I-PER', 'B-LOC', 'I-LOC', 'B-ORG', 'I-ORG', 'B-MISC', 'I-MISC')
         self.i2tag = {i:s for i, s in enumerate(self.tags)}
         self.tag2i = {s:i for i, s in enumerate(self.tags)}
 
-        self.bert_encoder = bert_encoder
-        self.bert = self.bert_encoder.bert
-        d_features = self.bert_encoder.bert.dim
+        self.pretrained_model = pretrained_model
+        self.model = self.pretrained_model.model
+        d_features = self.pretrained_model.model.dim
         self.span_tip = nn.Linear(d_features, len(self.tags))
         
         if use_cuda:
             self.cuda()
     
     def predict_batch(self, sentences):
-        ann1, _ = self.bert_encoder(sentences, padded = False, include_clssep = False)
+        ann1, _ = self.pretrained_model(sentences, padded = False, include_clssep = False)
         return self.span_tip(ann1)

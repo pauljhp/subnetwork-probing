@@ -17,6 +17,7 @@ from transformers.models.roberta.modeling_roberta import (
     RobertaIntermediate,
     RobertaOutput,
 )
+import numpy as np
 
 
 
@@ -29,14 +30,16 @@ class MaskedWordLevelModel(WordLevelModel):
         ):
         """generalized version of masked_bert.MaskedWordLevelBert"""
         super().__init__(model_name)
-        self.model_name = model_name
+        self.replace_layers_with_masked(out_w_per_mask, in_w_per_mask, verbose=verbose)
+
+        if use_cuda: self.cuda()
 
     def replace_layers_with_masked(self, 
         out_w_per_mask: int, 
         in_w_per_mask: int, 
         verbose: bool = False):
         """
-        Replaces layers with their masked versions.
+        Replaces layers in-place with their masked versions.
         out_w_per_mask: the number of output dims covered by a single mask parameter
         in_w_per_mask: the same as above but for input dims
         
@@ -57,18 +60,16 @@ class MaskedWordLevelModel(WordLevelModel):
         replacement = lambda x: MaskedLinear.from_layer(x, out_w_per_mask, in_w_per_mask)
         if self.model_family in ["bert"]:
             layer_names = ('query', 'key', 'value', 'dense'), 
-
+            parent_types = (BertSelfAttention, BertSelfOutput, BertIntermediate, BertOutput), 
+            replacement = lambda x: MaskedLinear.from_layer(x, out_w_per_mask, in_w_per_mask)
         elif self.model_family in ["bart"]:
             layer_names = ("self_attn.q_proj", "self_attn.k_proj", "self_attn.v_proj", "self_attn.out_proj")
-            parent_types = nn.Linear
-            replacement = lambda x: MaskedLinear.from_layer(x, out_w_per_mask, in_w_per_mask)
         elif self.model_family in ["t5"]:
             layer_names = ("SelfAttention.q", "SelfAttention.k", "SelfAttention.v", "SelfAttention.o")
-            parent_types = nn.Linear
-            replacement = lambda x: MaskedLinear.from_layer(x, out_w_per_mask, in_w_per_mask)
         elif self.model_family in ["roberta"]:
             layer_names = ("attention.self.query", "attention.self.query", "attention.self.query", "attention.self.query")
-
+        else:
+            raise NotImplementedError
         replace_layers(layer_names, 
                        parent_types, 
                        replacement)
@@ -82,6 +83,7 @@ class MaskedWordLevelModel(WordLevelModel):
             if hasattr(module, 'regularizer'):
                 total += module.regularizer()
                 n += 1
+        if n == 0 : return None
         return total / n
     
     def compute_binary_pct(self):

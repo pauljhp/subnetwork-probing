@@ -6,7 +6,7 @@ from util import from_numpy, partial_state_dict
 from classifiers import POSModel, NERModel, UDModel
 from datasets import load_conllu, build_vocab, sent_avgs, masked_loss, evaluate, load_ner
 
-def train_pos(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
+def train_pos(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
               lr_base = 3e-5, mask_lr_base = 0.1, lr_warmup_frac = 0.1,
               epochs = 3, batch_size = 32, verbose = True,
               lambda_startup_frac = 0.25, lambda_warmup_frac = 0.5, subbatch_size = 8,
@@ -39,7 +39,7 @@ def train_pos(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
     train_data = load_conllu(train_path)
     dev_data = load_conllu(dev_path)
     pos_vocab = build_vocab(sum([[tok['upos'] for tok in exmp] for exmp in train_data], []))
-    model = POSModel(bert_encoder, len(pos_vocab))
+    model = POSModel(pretrained_model, len(pos_vocab))
 
     print("lambda_init: {}, lambda_final: {}, lambda_startup_frac: {}, lambda_warmup_frac: {}".format(
         lambda_init, lambda_final, lambda_startup_frac, lambda_warmup_frac))
@@ -91,8 +91,11 @@ def train_pos(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
                     loss = masked_loss(pos_tags, pos_pred, pad_mask)
                     (loss * len(examples_subbatch) / len(examples)).backward()
                 if masked:
-                    reg = model.bert.compute_total_regularizer()
-                    (lambda_reg * reg).backward()
+                    reg = model.model.compute_total_regularizer()
+                    if reg is not None:
+                        (lambda_reg * reg).backward()
+                    else:
+                        pass
                 #mask_grad_norm = torch.nn.utils.clip_grad_norm_(mask_params, np.inf)
                 #bert_grad_norm = torch.nn.utils.clip_grad_norm_(bert_params, np.inf)
                 trainer.step()
@@ -115,7 +118,7 @@ def train_pos(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
                                     'reg_val': reg.item(),
                                     #'mask_grad_norm': mask_grad_norm.item(), 
                                     #'bert_grad_norm': bert_grad_norm.item(), 
-                                    'pct_binary': model.bert.compute_binary_pct()})
+                                    'pct_binary': model.model.compute_binary_pct()})
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
@@ -128,7 +131,7 @@ def train_pos(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
             break
     return log, model
 
-def train_ud(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
+def train_ud(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
              lr_base = 3e-5, mask_lr_base = 0.1, lr_warmup_frac = 0.1,
              epochs = 3, batch_size = 32, verbose = True,
              lambda_startup_frac = 0.25, lambda_warmup_frac = 0.5, subbatch_size = 8,
@@ -185,7 +188,7 @@ def train_ud(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fina
     dev_data = load_conllu(dev_path)
     pos_vocab = build_vocab(sum([[tok['upos'] for tok in exmp] for exmp in train_data], []))
     deprel_vocab = build_vocab(sum([[tok['deprel'] for tok in exmp] for exmp in train_data], []))
-    model = UDModel(bert_encoder, len(pos_vocab), len(deprel_vocab))
+    model = UDModel(pretrained_model, len(pos_vocab), len(deprel_vocab))
 
     print("lambda_init: {}, lambda_final: {}, lambda_startup_frac: {}, lambda_warmup_frac: {}".format(
         lambda_init, lambda_final, lambda_startup_frac, lambda_warmup_frac))
@@ -228,8 +231,11 @@ def train_ud(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fina
                     loss = masked_loss(dep_idx, idx_pred, pad_mask) + masked_loss(dep_rels, deprel_pred, pad_mask)
                     (loss * len(examples_subbatch) / len(examples)).backward()
                 if masked:
-                    reg = model.bert.compute_total_regularizer()
-                    (lambda_reg * reg).backward()
+                    reg = model.model.compute_total_regularizer()
+                    if reg is not None:
+                        (lambda_reg * reg).backward()
+                    else:
+                        pass
                 #mask_grad_norm = torch.nn.utils.clip_grad_norm_(mask_params, np.inf)
                 #bert_grad_norm = torch.nn.utils.clip_grad_norm_(bert_params, np.inf)
                 trainer.step()
@@ -252,7 +258,7 @@ def train_ud(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fina
                                     'reg_val': reg.item(),
                                     #'mask_grad_norm': mask_grad_norm.item(), 
                                     #'bert_grad_norm': bert_grad_norm.item(), 
-                                    'pct_binary': model.bert.compute_binary_pct()})
+                                    'pct_binary': model.model.compute_binary_pct()})
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
@@ -265,7 +271,7 @@ def train_ud(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fina
             break
     return log, model
 
-def train_ner(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
+def train_ner(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
               lr_base = 3e-5, mask_lr_base = 0.1, lr_warmup_frac = 0.1,
               epochs = 3, batch_size = 32, verbose = True,
               lambda_startup_frac = 0.25, lambda_warmup_frac = 0.5, subbatch_size = 8,
@@ -304,7 +310,7 @@ def train_ner(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
             return accs_converged and sparsity_converged
         return accs_converged
 
-    model = NERModel(bert_encoder)
+    model = NERModel(pretrained_model)
     train_data = load_ner(train_path, model.tag2i)
     dev_data = load_ner(dev_path, model.tag2i)    
 
@@ -344,8 +350,11 @@ def train_ner(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
                     loss = F.cross_entropy(model.predict_batch(sents), from_numpy(pack_labels(labels)).long())
                     (loss * len(examples_subbatch) / len(examples)).backward()
                 if masked:
-                    reg = model.bert.compute_total_regularizer()
-                    (lambda_reg * reg).backward()
+                    reg = model.model.compute_total_regularizer()
+                    if reg is not None:
+                        (lambda_reg * reg).backward()
+                    else:
+                        pass
                 #mask_grad_norm = torch.nn.utils.clip_grad_norm_(mask_params, np.inf)
                 #bert_grad_norm = torch.nn.utils.clip_grad_norm_(bert_params, np.inf)
                 trainer.step()
@@ -368,7 +377,7 @@ def train_ner(bert_encoder, train_path, dev_path, lambda_init = 1000, lambda_fin
                                     'reg_val': reg.item(),
                                     #'mask_grad_norm': mask_grad_norm.item(), 
                                     #'bert_grad_norm': bert_grad_norm.item(), 
-                                    'pct_binary': model.bert.compute_binary_pct()})
+                                    'pct_binary': model.model.compute_binary_pct()})
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})

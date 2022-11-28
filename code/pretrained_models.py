@@ -37,31 +37,48 @@ _reverse_model_lookup = dict(itertools.chain(
     )
 
 
-class WordLevelModel:
+class WordLevelModel(nn.Module):
     """generalized word level models"""
 
     def __init__(self, model_name: str) -> None:
         super().__init__()
         try:
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-            if _reverse_model_lookup.get(model_name) in ["bart", "gpt", "roberta"]:
+            self.model_name = model_name
+            self.model_family = _reverse_model_lookup.get(model_name)
+            if self.model_family in ["bart", "roberta"]:
                 model = AutoModel.from_pretrained(model_name)
-            elif _reverse_model_lookup.get(model_name) in ["bert"]:
+            elif self.model_family in ["bert"]:
                 model = AutoModelForMaskedLM.from_pretrained(model_name)
-            elif _reverse_model_lookup.get(model_name) in ["t5"]:
+            elif self.model_family in ["t5"]:
                 model = AutoModelWithLMHead.from_pretrained(model_name)
             else: raise NotImplementedError(f"model {model_name} is not supported!")
             
-            self.mode_name = model_name
-            self.model_family = _reverse_model_lookup.get(model_name)
-            self.register_buffer(model_name, self.model_family)
             self.model = model
-            self.dim = self.model.pooler.dense.in_features
-            self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+            if self.model_family in ["bart"]:
+                self.dim = self.model.get_decoder().layers[0].self_attn.out_proj.in_features
+                self.max_len = self.model.encoder.embed_positions.num_embeddings
+            elif self.model_family in ["roberta"]:
+                for name, module in self.model.named_modules():
+                    if "attention" in name:
+                        self.dim = module.output.dense.in_features
+                        break
+                self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+            elif self.model_family in ["bert"]:
+                self.dim = self.model.pooler.dense.in_features
+                self.max_len = self.model.embeddings.position_embeddings.num_embeddings
+            elif self.model_family in ["t5"]:
+                for name, module in self.model.named_modules():
+                    if "SelfAttention" in name:
+                        self.dim = module.o.in_features
+                        break
+                self.max_len = self.model.encoder.embed_tokens.num_embeddings
+            else: raise NotImplementedError(f"model {model_name} is not supported!")
+            
             if use_cuda:
                 self.cuda()
         except Exception as exp:
-            LOGGER.exception(exp)
+            LOGGER.exception(f"{exp}\n----\n")
     
     def forward(self, sentences, padded = True, include_clssep = True):
         return self.annotate(sentences, output_hidden = False, padded = padded, include_clssep = include_clssep)[0]
@@ -95,7 +112,7 @@ class WordLevelModel:
             tokens.append("[CLS]")
             end_mask.append(int(include_clssep))
             for word in sentence:
-                word_tokens = self.bert_tokenizer.tokenize(word)
+                word_tokens = self.tokenizer.tokenize(word)
                 assert len(word_tokens) > 0, \
                     "Unknown word: {} in {}".format(word, sentence)
                 for _ in range(len(word_tokens)):
@@ -104,7 +121,7 @@ class WordLevelModel:
                 tokens.extend(word_tokens)
             tokens.append("[SEP]")
             end_mask.append(int(include_clssep))
-            input_ids = self.bert_tokenizer.convert_tokens_to_ids(tokens)
+            input_ids = self.tokenizer.convert_tokens_to_ids(tokens)
             
             all_input_ids[s_num, :len(input_ids)] = input_ids
             all_input_mask[s_num, :len(input_ids)] = 1
@@ -119,9 +136,19 @@ class WordLevelModel:
         
         # all_input_ids: num_sentences x max_sentence_len
         if output_hidden:
-            features, _, hidden, attention = self.bert(all_input_ids, attention_mask = all_input_mask)
+            if self.model_family in ["t5"]:
+                features, _, hidden, attention = self.model(all_input_ids, 
+                    attention_mask = all_input_mask,
+                    decoder_input_ids=all_input_ids).values()
+            else:
+                features, _, hidden, attention = self.model(all_input_ids, attention_mask = all_input_mask).values()
         else:
-            features, _ = self.bert(all_input_ids, attention_mask = all_input_mask)
+            if self.model_family in ["t5"]:
+                features, _, _ = self.model(all_input_ids, 
+                    attention_mask = all_input_mask,
+                    decoder_input_ids=all_input_ids).values()
+            else:
+                features, _ = self.model(all_input_ids, attention_mask = all_input_mask).values()
             hidden, attention = None, None
         del _
         # for each word, only keep last encoded token.
