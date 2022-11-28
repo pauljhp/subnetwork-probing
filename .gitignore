@@ -4,6 +4,7 @@ log/
 # large data files
 *.zip
 *.pt
+# UD_English/
 
 # tests
 test.ipynb
