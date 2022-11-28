@@ -26,8 +26,8 @@ LOGGER = logging.getLogger()
 __accepted_models__ = {
     "bert": ["bert-base-cased", "bert-base-uncased"],
     "bart": ["facebook/bart-base"],
-    "t5": ["t5_base", "t5-small"],
-    "gpt": ["gpt2", "gpt2-medium", "gpt2-large"],
+    "t5": ["t5-base", "t5-small"],
+    # "gpt": ["gpt2", "gpt2-medium", "gpt2-large"],
     "roberta": ["roberta-base", "roberta-large"]} # TODO - add support for other models
 
 _reverse_model_lookup = dict(itertools.chain(
@@ -37,7 +37,7 @@ _reverse_model_lookup = dict(itertools.chain(
     )
 
 
-class WordLevelModels:
+class WordLevelModel:
     """generalized word level models"""
 
     def __init__(self, model_name: str) -> None:
@@ -52,6 +52,7 @@ class WordLevelModels:
                 model = AutoModelWithLMHead.from_pretrained(model_name)
             else: raise NotImplementedError(f"model {model_name} is not supported!")
             
+            self.mode_name = model_name
             self.model_family = _reverse_model_lookup.get(model_name)
             self.register_buffer(model_name, self.model_family)
             self.model = model
