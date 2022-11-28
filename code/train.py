@@ -119,14 +119,16 @@ def train_pos(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                         else:
                             log.append({'dev_acc': calc_dev(),
                                         'loss_val': loss.item(), 
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
@@ -267,14 +269,16 @@ def train_ud(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                         else:
                             log.append({'dev_acc': calc_dev(),
                                         'loss_val': loss.item(), 
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
@@ -394,14 +398,16 @@ def train_ner(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                         else:
                             log.append({'dev_acc': calc_dev(),
                                         'loss_val': loss.item(), 
                                         # 'reg_val': reg.item(),
                                         #'mask_grad_norm': mask_grad_norm.item(), 
                                         #'bert_grad_norm': bert_grad_norm.item(), 
-                                        'pct_binary': model.model.compute_binary_pct()})
+                                        # 'pct_binary': model.model.compute_binary_pct()
+                                        })
                     else:
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
