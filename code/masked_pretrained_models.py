@@ -67,7 +67,7 @@ class MaskedWordLevelModel(WordLevelModel):
         elif self.model_family in ["t5"]:
             layer_names = ("SelfAttention.q", "SelfAttention.k", "SelfAttention.v", "SelfAttention.o")
         elif self.model_family in ["roberta"]:
-            layer_names = ("attention.self.query", "attention.self.query", "attention.self.query", "attention.self.query")
+            layer_names = ("attention.self.query", "attention.self.key", "attention.self.value", "attention.output.dense")
         else:
             raise NotImplementedError
         replace_layers(layer_names, 
