@@ -131,12 +131,12 @@ def train_pos(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
                     check_processed -= check_every
-                    if converged(log):
-                        break
+                    # if converged(log):
+                    #     break
                     if verbose:
                         print("Log: {}".format(log[-1]))
-        if converged(log):
-            break
+        # if converged(log):
+        #     break
     return log, model
 
 def train_ud(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
@@ -279,12 +279,12 @@ def train_ud(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
                     check_processed -= check_every
-                    if converged(log):
-                        break
+                    # if converged(log):
+                    #     break
                     if verbose:
                         print("Log: {}".format(log[-1]))
-        if converged(log):
-            break
+        # if converged(log):
+        #     break
     return log, model
 
 def train_ner(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_final = 10000,
@@ -406,12 +406,12 @@ def train_ner(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
                         log.append({'dev_acc': calc_dev(),
                                     'loss_val': loss.item()})
                     check_processed -= check_every
-                    if converged(log):
-                        break
+                    # if converged(log):
+                    #     break
                     if verbose:
                         print("Log: {}".format(log[-1]))
-        if converged(log):
-            break
+        # if converged(log):
+        #     break
     return log, model
 
 def save_mask_scores(model, log, base = '../test/mask_scores'):
