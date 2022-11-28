@@ -74,6 +74,7 @@ def train_pos(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
     check_every = 2048
     lambda_reg = lambda_init
     for epoch in range(epochs):#tqdm.notebook.tqdm(range(epochs)):
+        if verbose: print(f"epoch {epoch})")
         np.random.shuffle(train_data)
         for i in range(0, len(train_data), batch_size):#tqdm.notebook.tqdm(range(0, len(train_data), batch_size)):
             examples = train_data[i:i+batch_size]
@@ -222,6 +223,7 @@ def train_ud(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda_
     check_every = 2048
     lambda_reg = lambda_init
     for epoch in range(epochs):#tqdm.notebook.tqdm(range(epochs)):
+        if verbose: print(f"epoch {epoch})")
         np.random.shuffle(train_data)
         for i in range(0, len(train_data), batch_size):#tqdm.notebook.tqdm(range(0, len(train_data), batch_size)):
             examples = train_data[i:i+batch_size]
@@ -356,6 +358,7 @@ def train_ner(pretrained_model, train_path, dev_path, lambda_init = 1000, lambda
     check_every = 2048
     lambda_reg = lambda_init
     for epoch in range(epochs):#tqdm.notebook.tqdm(range(epochs)):
+        if verbose: print(f"epoch {epoch})")
         np.random.shuffle(train_data)
         for i in range(0, len(train_data), batch_size):#tqdm.notebook.tqdm(range(0, len(train_data), batch_size)):
             examples = train_data[i:i+batch_size]
